@@ -1,0 +1,11 @@
+{
+    "display_name": "Nox Library",
+    "loading_order": 1,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "author": "CasualAutopsy",
+    "version": "0.1.0",
+    "homePage": "https://github.com/CasualAutopsy/STLibs-Nox-Library",
+    "auto_update": false
+}
