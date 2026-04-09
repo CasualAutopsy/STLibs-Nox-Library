@@ -1,11 +1,11 @@
-import {isTrueBoolean} from '../../../../utils.js';
+const {isTrueBoolean} = await import(/* webpackIgnore: true */ '/scripts/utils.js');
 
-import {
+const {
     getLocalVariable,
     setLocalVariable,
     getGlobalVariable,
     setGlobalVariable
-} from '../../../../variables.js';
+} = await import(/* webpackIgnore: true */ '/scripts/variables.js');
 
 // VALUE PARSING
 
