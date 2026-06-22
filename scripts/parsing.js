@@ -1,11 +1,14 @@
-const {isTrueBoolean} = await import(/* webpackIgnore: true */ '/scripts/utils.js');
+// @ts-nocheck
+const { isTrueBoolean } = await import(/* webpackIgnore: true */ '/scripts/utils.js');
+const { variables } = SillyTavern.getContext();
 
-const {
-    getLocalVariable,
-    setLocalVariable,
-    getGlobalVariable,
-    setGlobalVariable
-} = await import(/* webpackIgnore: true */ '/scripts/variables.js');
+const [
+    getLocalVariable, setLocalVariable,
+    getGlobalVariable, setGlobalVariable
+] = [
+    variables.local.get, variables.local.set,
+    variables.global.get, variables.global.set
+];
 
 // VALUE PARSING
 

@@ -1,7 +1,20 @@
-const {chat_metadata} = await import('../../../../../script.js');
-const {extension_settings} = await import('../../../../extensions.js');
-const {enumIcons} = await import('../../../../slash-commands/SlashCommandCommonEnumsProvider.js');
-const {SlashCommandEnumValue, enumTypes} = await import(/* webpackIgnore: true */ '../../../../slash-commands/SlashCommandEnumValue.js');
+// @ts-nocheck
+const { enumIcons } = await import(/* webpackIgnore: true */ '../../../../slash-commands/SlashCommandCommonEnumsProvider.js');
+const { enumTypes } = await import(/* webpackIgnore: true */ '../../../../slash-commands/SlashCommandEnumValue.js');
+
+const {
+    chatMetadata, extensionSettings,
+    SlashCommandEnumValue
+} = SillyTavern.getContext(),
+
+[
+    chat_metadata,
+    extension_settings
+] = [
+    chatMetadata,
+    extensionSettings
+];
+
 
 /** @typedef {import('../../../../slash-commands/SlashCommandExecutor.js').SlashCommandExecutor} SlashCommandExecutor */
 /** @typedef {import('../../../../slash-commands/SlashCommandScope.js').SlashCommandScope} SlashCommandScope */
