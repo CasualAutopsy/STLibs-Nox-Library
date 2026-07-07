@@ -9,17 +9,19 @@ const [
     variables.global.get, variables.global.set
 ];
 
+
+
 /**
- * Grab a local variable and parse it into the appropriate data type.
+ * Grab a local variable and parse it into a number.
  *
  * @param {String} varName - The name of the variable to get.
- * @returns {*} - The value of the variable.
+ * @returns {Number} - The parsed number.
  */
-function getLocalVar(varName) {
+function getLocalNumberVar(varName) {
     const value = getLocalVariable(varName);
 
     if (value !== '') {
-        return parseValue(value);
+        return Number(value);
 
     } else {
         throw new TypeError('No such variable: ' + varName + '(Local)');
@@ -27,51 +29,16 @@ function getLocalVar(varName) {
 }
 
 /**
- * Grab a local variable and parse it into a JSON object/array.
+ * Grab a global variable and parse it into a number.
  *
  * @param {String} varName - The name of the variable to get.
- * @returns {Object|Array<*>} - The parsed JSON object/array.
+ * @returns {Number} - The parsed number.
  */
-function getLocalVarJSON(varName) {
-    const value = getLocalVariable(varName);
-
-    if (value !== '') {
-        return parseJSON(value);
-
-    } else {
-        throw new TypeError('No such variable: ' + varName + '(Local)');
-    }
-
-}
-
-/**
- * Grab a global variable and parse it into the appropriate data type.
- *
- * @param {String} varName - The name of the variable to get.
- * @returns {*} - The value of the variable.
- */
-function getGlobalVar(varName) {
+function getGlobalNumberVar(varName) {
     const value = getGlobalVariable(varName);
 
     if (value !== '') {
-        return parseValue(value);
-
-    } else {
-        throw new TypeError('No such variable: ' + varName + '(Global)');
-    }
-}
-
-/**
- * Grab a global variable and parse it into a JSON object/array.
- *
- * @param {String} varName - The name of the variable to get.
- * @returns {Object|Array<*>} The parsed JSON object/array.
- */
-function getGlobalVarJSON(varName) {
-    const value = getGlobalVariable(varName);
-
-    if (value !== '') {
-        return parseJSON(value);
+        return Number(value);
 
     } else {
         throw new TypeError('No such variable: ' + varName + '(Global)');
@@ -79,46 +46,25 @@ function getGlobalVarJSON(varName) {
 }
 
 
+
 /**
- * Parse a value or variable into a value.
+ * Parse a value or variable into a number.
  * If the target is a variable name, it will be resolved to its value.
  *
  * @param {String} target - The target variable or value to parse.
  * @param {*} resolve
- * @returns {*} - The parsed value.
+ * @returns {Number} - The parsed number
  */
-export function parseMacroValueOrVar(target, resolve) {
+export function parseMacroNumberOrVar(target, resolve) {
     let varArg = resolve(target);
 
     const [, prefix, varName] = varArg.match(/^([.$])?([-_a-zA-Z]+)$/) || [null, null, null];
 
     if (!prefix) {
-        return parseValue(varArg);
+        return Number(varArg);
     } else {
         return prefix === '.'
-            ? getLocalVar(varName)
-            : getGlobalVar(varName);
-    }
-}
-
-/**
- * Parse a JSON string or variable into a JSON object/array.
- * If the target is a variable name, it will be resolved to its value.
- *
- * @param {String} target - The target variable or value string to parse.
- * @param {*} resolve
- * @returns {Object|Array<*>} - The parsed JSON object/array
- */
-export function parseMacroJSONOrVar(target, resolve) {
-    let varArg = resolve(target);
-
-    const [, prefix, varName] = varArg.match(/^([.$])?([-_a-zA-Z]+)$/) || [null, null, null];
-
-    if (!prefix) {
-        return parseJSON(varArg);
-    } else {
-        return prefix === '.'
-            ? getLocalVarJSON(varName)
-            : getGlobalVarJSON(varName);
+            ? getLocalNumberVar(varName)
+            : getGlobalNumberVar(varName);
     }
 }
