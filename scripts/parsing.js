@@ -26,7 +26,7 @@ export function parseJSON(value) {
             : JSON.parse(value);
 
     } catch {
-        throw new TypeError('Invalid JSON: ' + value);
+        throw new Error('Invalid JSON: ' + value);
     }
 }
 
@@ -39,20 +39,62 @@ export function parseJSON(value) {
 export function parseValue(value) {
 
     try {
-        return parseJSON(value);
+        return typeof value == 'object'
+            ? value
+            : JSON.parse(value);
 
     } catch {
-        const numericValue = parseFloat(value);
-
-        if (!isNaN(numericValue)) {
-            return numericValue;
-        }
-
         if (value === 'true' || value === 'false') {
             return isTrueBoolean(value);
         }
 
+        const numericValue = Number(value);
+
+        if (!Number.isNaN(numericValue)) {
+            return numericValue;
+        }
+
         return value;
+    }
+}
+
+/**
+ * Parses a value into a boolean.
+ *
+ * @param {String} value - The value to parse.
+ * @returns {Boolean} - The parsed boolean.
+ */
+export function parseBoolean(value) {
+    if (value === 'true' || value === 'false') {
+        return isTrueBoolean(value);
+    } else {
+        throw new Error('Invalid boolean: ' + value);
+    }
+}
+
+/**
+ * Parses a value into a string.
+ *
+ * @param {String} value - The value to parse.
+ * @returns {String} - The parsed string.
+ */
+export function parseString(value) {
+    return String(value);
+}
+
+/**
+ * Parses a value into a number.
+ *
+ * @param {String} value - The value to parse.
+ * @returns {Number} - The parsed number.
+ */
+export function parseNumber(value) {
+    const numericValue = Number(value);
+
+    if (!Number.isNaN(numericValue)) {
+        return numericValue;
+    } else {
+        throw new Error('Invalid number: ' + value);
     }
 }
 
@@ -71,7 +113,7 @@ function getScopeVar(varName, args) {
         return parseValue(args._scope.getVariable(varName));
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Scope)');
+        throw new Error('No such variable: ' + varName + '(Scope)');
     }
 }
 
@@ -88,7 +130,7 @@ function getScopeVarJSON(varName, args) {
         return parseJSON(args._scope.getVariable(varName));
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Scope)');
+        throw new Error('No such variable: ' + varName + '(Scope)');
     }
 }
 
@@ -108,7 +150,7 @@ function getMutableScopeVar(varName, args) {
 
         return { list: get(), setList: set };
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Scope)');
+        throw new Error('No such variable: ' + varName + '(Scope)');
     }
 }
 
@@ -125,7 +167,7 @@ function getLocalVar(varName) {
         return parseValue(value);
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Local)');
+        throw new Error('No such variable: ' + varName + '(Local)');
     }
 }
 
@@ -142,7 +184,7 @@ function getLocalVarJSON(varName) {
         return parseJSON(value);
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Local)');
+        throw new Error('No such variable: ' + varName + '(Local)');
     }
 
 }
@@ -164,7 +206,7 @@ function getMutableLocalVar(varName) {
         return { list: get(), setList: set };
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Local)');
+        throw new Error('No such variable: ' + varName + '(Local)');
     }
 }
 
@@ -181,7 +223,7 @@ function getGlobalVar(varName) {
         return parseValue(value);
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Global)');
+        throw new Error('No such variable: ' + varName + '(Global)');
     }
 }
 
@@ -198,7 +240,7 @@ function getGlobalVarJSON(varName) {
         return parseJSON(value);
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Global)');
+        throw new Error('No such variable: ' + varName + '(Global)');
     }
 }
 
@@ -219,7 +261,7 @@ function getMutableGlobalVar(varName) {
         return { list: get(), setList: set };
 
     } else {
-        throw new TypeError('No such variable: ' + varName + '(Global)');
+        throw new Error('No such variable: ' + varName + '(Global)');
     }
 }
 
@@ -258,18 +300,13 @@ export function parseValueOrVar(target, args) {
  * @returns {Object|Array<*>} - The parsed JSON object/array
  */
 export function parseJSONOrVar(target, args) {
-    let prefix, varName;
+    const [, prefix, varName] = target.match(/^([:.$])?([-_a-zA-Z]+)$/);
 
-    try {
-        [, prefix, varName] = target.match(/^([:.$])?([-_a-zA-Z]+)$/);
 
-        if (!prefix) {
-            throw new TypeError();
-        }
-
-    } catch {
+    if (!prefix) {
         return parseJSON(target);
     }
+
 
     if (prefix === ':') {
         return getScopeVarJSON(varName, args);
@@ -291,22 +328,17 @@ export function parseJSONOrVar(target, args) {
  * @returns {{list: Object|Array<*>, setList: (function(Object|Array<*>): String)}} - The parsed JSON object/array and a function to update the variable.
  */
 export function mutableParseValueOrVar(target, args) {
-    let prefix, varName;
+    const [, prefix, varName] = target.match(/^([:.$])?([-_a-zA-Z]+)$/);
 
-    try {
-        [, prefix, varName] = target.match(/^([:.$])?([-_a-zA-Z]+)$/);
 
-        if (!prefix) {
-            throw new TypeError();
-        }
-
-    } catch {
+    if (!prefix) {
         const
             get = () => parseJSON(target),
             set = () => {};
 
         return { list: get(), setList: set };
     }
+
 
     if (prefix === ':') {
         return getMutableScopeVar(varName, args);
