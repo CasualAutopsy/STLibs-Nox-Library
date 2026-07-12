@@ -1,4 +1,4 @@
-import { parseValue, parseJSON } from './parsing.js';
+import { parseValue, parseJSON, parseString, parseNumber, parseBoolean } from './parsing.js';
 const { variables } = SillyTavern.getContext();
 
 const [
@@ -55,7 +55,7 @@ function getLocalStringVar(varName) {
     const value = getLocalVariable(varName);
 
     if (value !== '') {
-        return String(value);
+        return parseString(value);
 
     } else {
         throw new Error('No such variable: ' + varName + '(Local)');
@@ -72,7 +72,7 @@ function getLocalNumberVar(varName) {
     const value = getLocalVariable(varName);
 
     if (value !== '') {
-        return Number(value);
+        return parseNumber(value);
 
     } else {
         throw new Error('No such variable: ' + varName + '(Local)');
@@ -89,7 +89,7 @@ function getLocalBoolVar(varName) {
     const value = getLocalVariable(varName);
 
     if (value !== '') {
-        return Boolean(value);
+        return parseBoolean(value);
 
     } else {
         throw new Error('No such variable: ' + varName + '(Local)');
@@ -140,7 +140,7 @@ function getGlobalStringVar(varName) {
     const value = getGlobalVariable(varName);
 
     if (value !== '') {
-        return String(value);
+        return parseString(value);
 
     } else {
         throw new Error('No such variable: ' + varName + '(Global)');
@@ -157,7 +157,7 @@ function getGlobalNumberVar(varName) {
     const value = getGlobalVariable(varName);
 
     if (value !== '') {
-        return Number(value);
+        return parseNumber(value);
 
     } else {
         throw new Error('No such variable: ' + varName + '(Global)');
@@ -174,7 +174,7 @@ function getGlobalBoolVar(varName) {
     const value = getGlobalVariable(varName);
 
     if (value !== '') {
-        return Boolean(value);
+        return parseBoolean(value);
 
     } else {
         throw new Error('No such variable: ' + varName + '(Global)');

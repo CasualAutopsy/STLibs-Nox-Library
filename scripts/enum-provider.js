@@ -16,8 +16,11 @@ const {
 ];
 
 
-/** @typedef {import('../../../../slash-commands/SlashCommandExecutor.js').SlashCommandExecutor} SlashCommandExecutor */
-/** @typedef {import('../../../../slash-commands/SlashCommandScope.js').SlashCommandScope} SlashCommandScope */
+/**
+ * @typedef {import('../../../../slash-commands/SlashCommandExecutor.js').SlashCommandExecutor} SlashCommandExecutor
+ * @typedef {import('../../../../slash-commands/SlashCommandScope.js').SlashCommandScope} SlashCommandScope
+ * @typedef {import('../../../../slash-commands/SlashCommandEnumValue.js').SlashCommandEnumValue} SlashCommandEnumValue
+ */
 
 function objectCheck(input) {
     try {
@@ -140,6 +143,35 @@ export const noxEnumProvider = {
                     name => new SlashCommandEnumValue('$' + name, null, enumTypes.macro, enumIcons.globalVariable)
                 ) : [],
 
+        ].filter((item, idx, list) => idx == list.findIndex(it => it.value == item.value));
+    },
+
+    /**
+     *
+     * @returns {(executor:SlashCommandExecutor, scope:SlashCommandScope) => SlashCommandEnumValue[]}
+     */
+    discoreWidgetTypes: () => (_, scope) => {
+        return [
+            new SlashCommandEnumValue(
+                '1',
+                'String Datatype',
+                enumTypes.enum,
+                enumIcons.string,
+            ),
+
+            new SlashCommandEnumValue(
+                '2',
+                'Number Datatype',
+                enumTypes.enum,
+                enumIcons.number,
+            ),
+
+            new SlashCommandEnumValue(
+                '3',
+                'Media URL',
+                enumTypes.enum,
+                enumIcons.image,
+            ),
         ].filter((item, idx, list) => idx == list.findIndex(it => it.value == item.value));
     }
 };
