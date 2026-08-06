@@ -6,8 +6,11 @@ import { MacroHelpers } from './lib/macro-helpers.js';
 
 import { StringOps } from './lib/string-ops.js';
 
+import { ChatLogManipulation } from './lib/chat-logs.js';
+
 import { KoboAPI } from './lib/kobo-endpoint.js';
 
+// eslint-disable-next-line no-undef
 globalThis.NoxLib = {
     CoercionAndShorthand,
     MacroCoercionAndShorthand,
@@ -15,6 +18,8 @@ globalThis.NoxLib = {
     MacroHelpers,
 
     StringOps,
+
+    ChatLogManipulation,
 
     KoboAPI,
 };

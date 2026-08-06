@@ -1,0 +1,36 @@
+{
+  "name": "nox-library",
+  "version": "0.3.0",
+  "author": "CasualAutopsy",
+  "description": "Library of helpful functions with no goal in mind besides things *I* would personally find useful for ST extension development.",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "scripts": {
+    "build": "webpack --mode production"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint-config-react-app": "^7.0.1",
+    "tinybench": "^6.1.2"
+  }
+}
